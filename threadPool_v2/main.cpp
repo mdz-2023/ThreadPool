@@ -5,18 +5,18 @@
 #include <future>
 #include <functional>
 
-using ulong = unsigned long long;
+using ull = unsigned long long;
 
 /*
-	ÈÃÏß³Ì³ØÌá½»ÈÎÎñ¸ü·½±ã
-	1¡¢ĞÎÈçpool.submitTasks(sum, 10, 20) 
-		ÓÃ»§Ö»ĞèÒªĞ´Ò»¸öº¯Êı£¬Ö±½Ó½«º¯Êı×÷ÎªÏß³Ìº¯Êı£¬²¢ÇÒ´«Èë¿É±ä²ÎÊı
-		ÄÇÃ´submitTasksĞèÒª£º¿É±ä²ÎÄ£°å±à³Ì
+	è®©çº¿ç¨‹æ± æäº¤ä»»åŠ¡æ›´æ–¹ä¾¿
+	1ã€å½¢å¦‚pool.submitTasks(sum, 10, 20) 
+		ç”¨æˆ·åªéœ€è¦å†™ä¸€ä¸ªå‡½æ•°ï¼Œç›´æ¥å°†å‡½æ•°ä½œä¸ºçº¿ç¨‹å‡½æ•°ï¼Œå¹¶ä¸”ä¼ å…¥å¯å˜å‚æ•°
+		é‚£ä¹ˆsubmitTaskséœ€è¦ï¼šå¯å˜å‚æ¨¡æ¿ç¼–ç¨‹
 
-	2¡¢×Ô¼ºÔìµÄResultÒÔ¼°Ïà¹ØµÄÀàĞÍ£¬´úÂëÌ«¶à
-		C++ Ïß³Ì¿âµÄ thread¶ÔÏó£¬Ã»ÓĞÊµÏÖ½ÓÊÕÏß³Ìº¯ÊıµÄ·µ»ØÖµ
-		ËùÒÔÆäÌá¹©ÁË package_task £¨ÊÇÒ»¸öfunctionº¯Êı¶ÔÏó£©
-					async ¹¦ÄÜ¸üÇ¿´ó
+	2ã€è‡ªå·±é€ çš„Resultä»¥åŠç›¸å…³çš„ç±»å‹ï¼Œä»£ç å¤ªå¤š
+		C++ çº¿ç¨‹åº“çš„ threadå¯¹è±¡ï¼Œæ²¡æœ‰å®ç°æ¥æ”¶çº¿ç¨‹å‡½æ•°çš„è¿”å›å€¼
+		æ‰€ä»¥å…¶æä¾›äº† package_task ï¼ˆæ˜¯ä¸€ä¸ªfunctionå‡½æ•°å¯¹è±¡ï¼‰
+					async åŠŸèƒ½æ›´å¼ºå¤§
 */
 
 #if  0
@@ -24,17 +24,17 @@ int sum1(int a, int b) {
 	return a + b;
 }
 int main() {
-	// Ê¹ÓÃº¯Êı¶ÔÏó£¬´ò°üÒ»¸öÈÎÎñ
+	// ä½¿ç”¨å‡½æ•°å¯¹è±¡ï¼Œæ‰“åŒ…ä¸€ä¸ªä»»åŠ¡
 	std::packaged_task<int(int, int)> task(sum1);
 
-	// ½ÓÊÕ´ò°üÈÎÎñÖĞ£¬Ïß³Ìº¯ÊıµÄ·µ»ØÖµ¡£ÀàËÆResultÀà
+	// æ¥æ”¶æ‰“åŒ…ä»»åŠ¡ä¸­ï¼Œçº¿ç¨‹å‡½æ•°çš„è¿”å›å€¼ã€‚ç±»ä¼¼Resultç±»
 	std::future<int> res = task.get_future();
 	task(10, 20);
-	//// ÔÚ×ÓÏß³ÌÖĞÖ´ĞĞÈÎÎñ
-	//std::thread t(std::move(task), 10, 20); // Ê¹ÓÃÓÒÖµÒıÓÃ¿½±´¹¹Ôì
+	//// åœ¨å­çº¿ç¨‹ä¸­æ‰§è¡Œä»»åŠ¡
+	//std::thread t(std::move(task), 10, 20); // ä½¿ç”¨å³å€¼å¼•ç”¨æ‹·è´æ„é€ 
 	//t.detach();
 
-	std::cout << res.get(); // getº¯ÊıµÈ´ı½á¹ûµÄÊ±ºò»á×èÈûµ±Ç°½ø³Ì
+	std::cout << res.get(); // getå‡½æ•°ç­‰å¾…ç»“æœçš„æ—¶å€™ä¼šé˜»å¡å½“å‰è¿›ç¨‹
 
 
 	return 0;
@@ -74,22 +74,22 @@ int main() {
 	std::cout << "main over" << std::endl;
 #if 0
 	{
-	// Ìí¼Ó×÷ÓÃÓò£¬²âÊÔÎö¹¹º¯Êı
+	// æ·»åŠ ä½œç”¨åŸŸï¼Œæµ‹è¯•ææ„å‡½æ•°
 	ThreadPool pool;
-	// ÓÃ»§×Ô¼ºÉèÖÃÏß³Ì³Ø¹¤×÷Ä£Ê½
-	pool.setMode(PoolMode::MODE_CACHED); // ÉèÖÃÎª¶¯Ì¬±ä»¯µÄÏß³Ì³Ø
+	// ç”¨æˆ·è‡ªå·±è®¾ç½®çº¿ç¨‹æ± å·¥ä½œæ¨¡å¼
+	pool.setMode(PoolMode::MODE_CACHED); // è®¾ç½®ä¸ºåŠ¨æ€å˜åŒ–çš„çº¿ç¨‹æ± 
 	pool.start();
 
-	// ÎÊÌâ2£ºÈçºÎÉè¼ÆResult»úÖÆ£¿
+	// é—®é¢˜2ï¼šå¦‚ä½•è®¾è®¡Resultæœºåˆ¶ï¼Ÿ
 	//Result res = pool.submitTasks(std::make_shared<printTask>());
-	// µ«»ñÈ¡½á¹ûµÄÊ±ºò£¬Èç¹ûÃ»ÓĞ¼ÆËãÍê³ÉĞèÒª×èÈû
-	//res.get().cast_<int>(); //res.get()½«·µ»ØÒ»¸öAnyÀàĞÍ£¬cast_×÷ÎªÄ£°åº¯ÊıÓÉÓÃ»§´«ÈëÏëÒªµÄÀàĞÍ
+	// ä½†è·å–ç»“æœçš„æ—¶å€™ï¼Œå¦‚æœæ²¡æœ‰è®¡ç®—å®Œæˆéœ€è¦é˜»å¡
+	//res.get().cast_<int>(); //res.get()å°†è¿”å›ä¸€ä¸ªAnyç±»å‹ï¼Œcast_ä½œä¸ºæ¨¡æ¿å‡½æ•°ç”±ç”¨æˆ·ä¼ å…¥æƒ³è¦çš„ç±»å‹
 
 
-	// Master-Slever Ïß³ÌÄ£ĞÍ
-	// MasterÏß³ÌÓÃÀ´·Ö½âÈÎÎñ£¬È»ºó¸÷¸öSlaveÏß³Ì·ÖÅäÈÎÎñ
-	// µÈ´ı¸÷¸öSlaverÏß³ÌÖ´ĞĞÍê³ÉÈÎÎñ£¬·µ»Ø½á¹û
-	// MasterÏß³ÌºÏ²¢¸÷¸öÈÎÎñ½á¹û£¬Êä³ö
+	// Master-Slever çº¿ç¨‹æ¨¡å‹
+	// Masterçº¿ç¨‹ç”¨æ¥åˆ†è§£ä»»åŠ¡ï¼Œç„¶åå„ä¸ªSlaveçº¿ç¨‹åˆ†é…ä»»åŠ¡
+	// ç­‰å¾…å„ä¸ªSlaverçº¿ç¨‹æ‰§è¡Œå®Œæˆä»»åŠ¡ï¼Œè¿”å›ç»“æœ
+	// Masterçº¿ç¨‹åˆå¹¶å„ä¸ªä»»åŠ¡ç»“æœï¼Œè¾“å‡º
 	Result res1 = pool.submitTasks(std::make_shared<sumTask>(1, 10000000));
 	Result res2 = pool.submitTasks(std::make_shared<sumTask>(10000001, 20000000));
 	Result res3 = pool.submitTasks(std::make_shared<sumTask>(20000001, 30000000));
@@ -98,17 +98,17 @@ int main() {
 	Result res5 = pool.submitTasks(std::make_shared<sumTask>(10000001, 20000000));
 	Result res6 = pool.submitTasks(std::make_shared<sumTask>(20000001, 30000000));
 
-	ulong s1 = res1.get().cast_<ulong>();
-	ulong s2 = res2.get().cast_<ulong>();
-	ulong s3 = res3.get().cast_<ulong>();
+	ull s1 = res1.get().cast_<ull>();
+	ull s2 = res2.get().cast_<ull>();
+	ull s3 = res3.get().cast_<ull>();
 	std::cout << s1 + s2 + s3 << std::endl;
 
-	//ulong sum = 0;
+	//ull sum = 0;
 	//for (auto i = 1; i < 30000001; ++i) {
 	//	sum += i;
 	//}
 	//std::cout << sum;
-	//std::this_thread::sleep_for(std::chrono::seconds(5)); // Ë¯Ãß5Ãë
+	//std::this_thread::sleep_for(std::chrono::seconds(5)); // ç¡çœ 5ç§’
 }
 #endif
 	getchar();

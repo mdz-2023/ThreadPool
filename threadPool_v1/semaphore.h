@@ -5,20 +5,20 @@
 class Semaphore
 {
 public:
-	// resLimit³õÊ¼ÉèÖÃÎª0£¬µÈ´ıÏß³Ì½«½á¹û×¼±¸ºÃÔÙÊ¹ĞÅºÅÁ¿Ôö¼Ó
-	Semaphore(int resLimit = 0) // ÖØ´óBUG£¬±¾À´Ğ´³É1ÁË£¡£¡£¡£¡
+	// resLimitåˆå§‹è®¾ç½®ä¸º0ï¼Œç­‰å¾…çº¿ç¨‹å°†ç»“æœå‡†å¤‡å¥½å†ä½¿ä¿¡å·é‡å¢åŠ 
+	Semaphore(int resLimit = 0) // é‡å¤§BUGï¼Œæœ¬æ¥å†™æˆ1äº†ï¼ï¼ï¼ï¼
 		: resLimit_(resLimit) 
 	{ }
 	~Semaphore() = default;
 
-	// »ñÈ¡Ò»¸öĞÅºÅÁ¿×ÊÔ´ P²Ù×÷
+	// è·å–ä¸€ä¸ªä¿¡å·é‡èµ„æº Pæ“ä½œ
 	void wait() {
 		std::unique_lock<std::mutex> ulock(mtx_);
 		cond_.wait(ulock, [&]()->bool { return resLimit_ > 0; });
 		resLimit_--;
 	}
 
-	// Ôö¼ÓÒ»¸öĞÅºÅÁ¿×ÊÔ´ V²Ù×÷
+	// å¢åŠ ä¸€ä¸ªä¿¡å·é‡èµ„æº Væ“ä½œ
 	void post() {
 		std::unique_lock<std::mutex> ulock(mtx_);
 		resLimit_++;
